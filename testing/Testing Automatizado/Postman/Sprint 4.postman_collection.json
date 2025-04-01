@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "2ca74523-2734-4194-93c1-bfc62d9c40be",
+		"name": "Sprint 4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27380012"
+	},
+	"item": [
+		{
+			"name": "Activities Exitosa - Transferencia",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Script post-request para capturar el ID de la respuesta\r",
+							"try {\r",
+							"    // Obtenemos el cuerpo de la respuesta y lo convertimos a objeto JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    \r",
+							"    // Verificamos si la respuesta fue exitosa (código 200, 201, etc.)\r",
+							"    if (pm.response.code >= 200 && pm.response.code < 300) {\r",
+							"        // Verificamos si el ID existe en la respuesta\r",
+							"        if (responseBody.id) {\r",
+							"            // Guardamos el ID como variable global\r",
+							"            pm.globals.set(\"transferId\", responseBody.id);\r",
+							"            console.log(\"ID capturado y guardado como variable global 'transferId':\", responseBody.id);\r",
+							"        } \r",
+							"\r",
+							"    } else {\r",
+							"        console.log(\"La solicitud no fue exitosa. Código:\", pm.response.code);\r",
+							"        console.log(\"Respuesta:\", responseBody);\r",
+							"    }\r",
+							"} catch (error) {\r",
+							"    console.log(\"Error al procesar la respuesta:\", error);\r",
+							"    console.log(\"Respuesta original:\", pm.response.text());\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-500\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"{{cvu}}\",\r\n    \"destination\": \"9565944489292895033598\" // cuenta test destino\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia Sin Origen",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-500\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"\",\r\n    \"destination\": \"{{cvu}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia Sin Destino",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-500\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"9565944489292895033598\", // -> cuenta test con mucho saldo\r\n    \"destination\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia Sin Saldo Disponible",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-500000\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"{{cvu}}\",\r\n    \"destination\": \"7347578929766884572697\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia Monto Mayor A 0",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"50\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"{{cvu}}\",\r\n    \"destination\": \"7347578929766884572697\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia A La Misma Cuenta",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-5000000\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"{{cvu}}\",\r\n    \"destination\": \"{{cvu}}\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia Desde Otra Cuenta",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-5000000\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"4171658038663804048164\",\r\n    \"destination\": \"{{cvu}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Transferencia A Cuenta Inexistente",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-5000000\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Transfer\",\r\n    \"origin\": \"{{cvu}}\",\r\n    \"destination\": \"cuenta.no.existe\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

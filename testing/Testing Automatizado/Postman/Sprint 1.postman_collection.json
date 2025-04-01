@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "5e0744b7-d131-4dc1-b4cb-df5fa32a19fd",
+		"name": "Sprint 1",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these request types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT and PATCH requests.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a variable called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Tests\" tab**\n\nTests help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/b5f280a7-4b09-48ec-857f-0a7ed99d7ef8/U2NyZWVuc2hvdCAyMDIzLTAzLTI3IGF0IDkuNDcuMjggUE0ucG5n\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n- Add more scripts in \"Tests\" to verify if the API works as expected and execute flows.\n    \n\n## ℹ️ Resources\n\n[Building requests](https://learning.postman.com/docs/sending-requests/requests/)  \n[Authorizing requests](https://learning.postman.com/docs/sending-requests/authorization/)  \n[Using variables](https://learning.postman.com/docs/sending-requests/variables/)  \n[Managing environments](https://learning.postman.com/docs/sending-requests/managing-environments/)  \n[Writing scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27380012"
+	},
+	"item": [
+		{
+			"name": "Register Exitoso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Función para generar una cadena aleatoria de letras\r",
+							"function getRandomLetters(length) {\r",
+							"    const letters = 'abcdefghijklmnopqrstuvwxyz';\r",
+							"    let result = '';\r",
+							"    for (let i = 0; i < length; i++) {\r",
+							"        result += letters.charAt(Math.floor(Math.random() * letters.length));\r",
+							"    }\r",
+							"    return result;\r",
+							"}\r",
+							"\r",
+							"// Función para generar un número aleatorio de cierta longitud como string\r",
+							"function getRandomNumbers(length) {\r",
+							"    let result = '';\r",
+							"    for (let i = 0; i < length; i++) {\r",
+							"        result += Math.floor(Math.random() * 10).toString();\r",
+							"    }\r",
+							"    return result; // Ya es un string por defecto\r",
+							"}\r",
+							"\r",
+							"// Función para generar contraseña con formato específico\r",
+							"function generatePassword() {\r",
+							"    // 1 mayúscula, al menos 6 caracteres en total, 1 número\r",
+							"    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';\r",
+							"    const lowercase = 'abcdefghijklmnopqrstuvwxyz';\r",
+							"    const numbers = '0123456789';\r",
+							"    \r",
+							"    // Tomamos una letra mayúscula aleatoria\r",
+							"    let password = uppercase.charAt(Math.floor(Math.random() * uppercase.length));\r",
+							"    \r",
+							"    // Añadimos al menos 5 letras minúsculas (para garantizar un mínimo de 6 caracteres)\r",
+							"    for (let i = 0; i < 5; i++) {\r",
+							"        password += lowercase.charAt(Math.floor(Math.random() * lowercase.length));\r",
+							"    }\r",
+							"    \r",
+							"    // Añadimos un número aleatorio\r",
+							"    password += numbers.charAt(Math.floor(Math.random() * numbers.length));\r",
+							"    \r",
+							"    return password;\r",
+							"}\r",
+							"\r",
+							"// Generamos todos los datos\r",
+							"const randomLetters = getRandomLetters(6);\r",
+							"const randomLettersLastName = getRandomLetters(6);\r",
+							"const randomLettersEmail = getRandomLetters(6);\r",
+							"\r",
+							"// Creamos el objeto con los datos formateados\r",
+							"const userData = {\r",
+							"    firstName: \"TestName\" + randomLetters,\r",
+							"    lastName: \"TestLastName\" + randomLettersLastName,\r",
+							"    password: generatePassword(),\r",
+							"    phone: getRandomNumbers(10),    // Ya es string por como está implementada la función\r",
+							"    dni: getRandomNumbers(7 + Math.floor(Math.random() * 2)),    // Ya es string\r",
+							"    email: \"TestEmail\" + randomLettersEmail + \"@test.com\"\r",
+							"};\r",
+							"\r",
+							"// Establecemos los valores en las variables de entorno para usarlos en la solicitud\r",
+							"pm.globals.set(\"firstName\", userData.firstName);\r",
+							"pm.globals.set(\"lastName\", userData.lastName);\r",
+							"pm.globals.set(\"password\", userData.password);\r",
+							"pm.globals.set(\"phone\", userData.phone);\r",
+							"pm.globals.set(\"dni\", userData.dni);\r",
+							"pm.globals.set(\"email\", userData.email);\r",
+							"\r",
+							"// También podemos establecer todo el objeto JSON como una variable\r",
+							"pm.environment.set(\"userData\", JSON.stringify(userData));\r",
+							"\r",
+							"console.log(\"Datos generados:\", userData);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Script post-request para capturar el ID de la respuesta\r",
+							"try {\r",
+							"    // Obtenemos el cuerpo de la respuesta y lo convertimos a objeto JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    \r",
+							"    // Verificamos si la respuesta fue exitosa (código 200, 201, etc.)\r",
+							"    if (pm.response.code >= 200 && pm.response.code < 300) {\r",
+							"        // Verificamos si el ID existe en la respuesta\r",
+							"        if (responseBody.id) {\r",
+							"            // Guardamos el ID como variable global\r",
+							"            pm.globals.set(\"userId\", responseBody.id);\r",
+							"            pm.globals.set(\"accountId\", responseBody.accountId);\r",
+							"            pm.globals.set(\"cvu\", responseBody.cvu);\r",
+							"            console.log(\"ID capturado y guardado como variable global 'userId':\", responseBody.id);\r",
+							"        } \r",
+							"\r",
+							"    } else {\r",
+							"        console.log(\"La solicitud no fue exitosa. Código:\", pm.response.code);\r",
+							"        console.log(\"Respuesta:\", responseBody);\r",
+							"    }\r",
+							"} catch (error) {\r",
+							"    console.log(\"Error al procesar la respuesta:\", error);\r",
+							"    console.log(\"Respuesta original:\", pm.response.text());\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"password\": \"{{password}}\",\r\n    \"phone\": \"{{phone}}\",\r\n    \"dni\": \"{{dni}}\",\r\n    \"email\": \"{{email}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Usuario ya existente",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"{{email}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Falta Nombre",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Nombre invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"M4nuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Falta Apellido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Apellido invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"4braham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Falta Contraseña",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Contraseña invalida",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"aaaa\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Falta Telefono",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Telefono invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"11546ggggg78347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Falta DNI",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - DNI invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"437689ggggg76\",\r\n    \"email\": \"manu.20012009@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Falta Email",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register Fallido - Email invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Manuel\",\r\n    \"lastName\": \"Abraham\",\r\n    \"password\": \"Aeiou1\",\r\n    \"phone\": \"1154678347\",\r\n    \"dni\": \"43768976\",\r\n    \"email\": \"manu.20012009gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8085/api/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Exitoso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response.json();\r",
+							"\r",
+							"if (response.token) {\r",
+							"    pm.globals.set(\"token\", response.token);\r",
+							"    console.log(\"Token guardado globalmente:\", response.token);\r",
+							"} else {\r",
+							"    console.log(\"No se encontró el token en la respuesta.\");\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Fallido - Usuario no encontrado",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"esteusuarionoexiste@gmail.com\",\r\n    \"password\": \"Aeiou1\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Fallido - Contraseña incorrecta",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"estapasswordesinvalida\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout Exitoso",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/auth/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout Fallido - Token no valido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer aca va un token no valido",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/auth/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

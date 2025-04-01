@@ -1,0 +1,1056 @@
+{
+	"info": {
+		"_postman_id": "b8b19fb2-e14d-4578-8d89-431c18ad7f84",
+		"name": "Sprint 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27380012"
+	},
+	"item": [
+		{
+			"name": "Cards Exitoso - Listar Vacio - UserID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Exitoso - Crear",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Función para generar un número aleatorio de cierta longitud como string\r",
+							"function getRandomNumbers(length) {\r",
+							"    let result = '';\r",
+							"    for (let i = 0; i < length; i++) {\r",
+							"        result += Math.floor(Math.random() * 10).toString();\r",
+							"    }\r",
+							"    return result;\r",
+							"}\r",
+							"\r",
+							"// Función para generar fecha de expiración aleatoria (MMYY)\r",
+							"function getRandomExpiration() {\r",
+							"    // Mes aleatorio entre 01-12\r",
+							"    const month = Math.floor(Math.random() * 12) + 1;\r",
+							"    const monthStr = month < 10 ? '0' + month : month.toString();\r",
+							"    \r",
+							"    // Año aleatorio entre el actual y +10 años (últimos dos dígitos)\r",
+							"    const currentYear = new Date().getFullYear();\r",
+							"    const randomYear = Math.floor(Math.random() * 10) + currentYear;\r",
+							"    const yearStr = (randomYear % 100).toString();\r",
+							"    \r",
+							"    return monthStr + yearStr;\r",
+							"}\r",
+							"\r",
+							"// Generamos los datos de tarjeta aleatorios\r",
+							"const cardNumber = getRandomNumbers(16);\r",
+							"const cardCvc = getRandomNumbers(3);\r",
+							"const cardExpiration = getRandomExpiration();\r",
+							"\r",
+							"// Datos de tarjeta de crédito\r",
+							"const creditCardData = {\r",
+							"    expiration: cardExpiration,\r",
+							"    name: pm.environment.get(\"firstName\") + \" \" + pm.environment.get(\"lastName\"),\r",
+							"    number: cardNumber,\r",
+							"    cvc: cardCvc\r",
+							"};\r",
+							"\r",
+							"pm.globals.set(\"cardExpiration\", creditCardData.expiration);\r",
+							"pm.globals.set(\"cardName\", creditCardData.name);\r",
+							"pm.globals.set(\"cardNumber\", creditCardData.number);\r",
+							"pm.globals.set(\"cardCvc\", creditCardData.cvc);\r",
+							"\r",
+							"\r",
+							"console.log(\"Datos de tarjeta aleatorios generados:\", creditCardData);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Script post-request para capturar el ID de la respuesta\r",
+							"try {\r",
+							"    // Obtenemos el cuerpo de la respuesta y lo convertimos a objeto JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    \r",
+							"    // Verificamos si la respuesta fue exitosa (código 200, 201, etc.)\r",
+							"    if (pm.response.code >= 200 && pm.response.code < 300) {\r",
+							"        // Verificamos si el ID existe en la respuesta\r",
+							"        if (responseBody.id) {\r",
+							"            // Guardamos el ID como variable global\r",
+							"            pm.globals.set(\"cardId\", responseBody.id);\r",
+							"            console.log(\"ID capturado y guardado como variable global 'cardId':\", responseBody.id);\r",
+							"        } \r",
+							"\r",
+							"    } else {\r",
+							"        console.log(\"La solicitud no fue exitosa. Código:\", pm.response.code);\r",
+							"        console.log(\"Respuesta:\", responseBody);\r",
+							"    }\r",
+							"} catch (error) {\r",
+							"    console.log(\"Error al procesar la respuesta:\", error);\r",
+							"    console.log(\"Respuesta original:\", pm.response.text());\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"{{cardExpiration}}\",\r\n    \"name\": \"{{cardName}}\",\r\n    \"number\": \"{{cardNumber}}\",\r\n    \"cvc\": \"{{cardCvc}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Exitoso - Listar - UserID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Exitoso - Listar - UserID Inexistente",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/cards/e64dfeb1-8e7d-4b9b-8982-7f4c65d0e286",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"e64dfeb1-8e7d-4b9b-8982-7f4c65d0e286"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - La tarjeta ya existe",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"name\": \"Manuel Abraham\",\r\n    \"number\": \"{{cardNumber}}\",\r\n    \"cvc\": \"865\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Falta Expiration",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Manuel Abraham\",\r\n    \"number\": \"9874536520975176\",\r\n    \"cvc\": \"865\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Expiration invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"092886\",\r\n    \"name\": \"Manuel Abraham\",\r\n    \"number\": \"9874536520975176\",\r\n    \"cvc\": \"865\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Falta Nombre",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"number\": \"9874536520975176\",\r\n    \"cvc\": \"865\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Nombre invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"name\": \"Manuel 123\",\r\n    \"number\": \"9874536320975176\",\r\n    \"cvc\": \"865\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Falta Numero",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"name\": \"Manuel Abraham\",\r\n    \"cvc\": \"865\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Numero invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"name\": \"Manuel Abraham\",\r\n    \"number\": \"98745975176\",\r\n    \"cvc\": \"865\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - Falta CVC",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"name\": \"Manuel Abraham\",\r\n    \"number\": \"9874536520975176\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Crear - CVC invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expiration\": \"0928\",\r\n    \"name\": \"Manuel Abraham\",\r\n    \"number\": \"9874536520975176\",\r\n    \"cvc\": \"8644\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Exitoso - Eliminar",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/cards/{{cardId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"{{cardId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards Fallido - Eliminar",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/cards/ac7c8c39-2ce7-4a56-996c-456c368d0624",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"cards",
+						"ac7c8c39-2ce7-4a56-996c-456c368d0624"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users Exitoso - Listar",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/users/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Users Exitoso - Listar Fallido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/users/e64dfeb1-8e7d-4b9b-8982-7f4c65d0e285",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"users",
+						"e64dfeb1-8e7d-4b9b-8982-7f4c65d0e285"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Exitoso - Listar Por UserID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8083/api/accounts/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"accounts",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Fallido - Listar Por UserID Inexistente",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/accounts/e64dfeb1-8e7d-4b9b-8982-7f4c65d0e285",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts",
+						"e64dfeb1-8e7d-4b9b-8982-7f4c65d0e285"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Exitoso - Listar Todo",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Exitoso - Actualizar Alias",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Función para generar una palabra aleatoria con máximo 10 letras\r",
+							"function getRandomWord(maxLength = 10) {\r",
+							"    const letters = 'abcdefghijklmnopqrstuvwxyz';\r",
+							"    // Longitud aleatoria entre 3 y maxLength\r",
+							"    const length = Math.floor(Math.random() * (maxLength - 2)) + 3;\r",
+							"    \r",
+							"    let result = '';\r",
+							"    for (let i = 0; i < length; i++) {\r",
+							"        result += letters.charAt(Math.floor(Math.random() * letters.length));\r",
+							"    }\r",
+							"    return result;\r",
+							"}\r",
+							"\r",
+							"// Función para generar un alias en formato palabra.palabra.palabra\r",
+							"function generateAlias() {\r",
+							"    const word1 = getRandomWord().toUpperCase();\r",
+							"    const word2 = getRandomWord().toUpperCase();\r",
+							"    const word3 = getRandomWord().toUpperCase();\r",
+							"    \r",
+							"    return `${word1}.${word2}.${word3}`;\r",
+							"}\r",
+							"\r",
+							"// Generamos el alias\r",
+							"const alias = generateAlias();\r",
+							"\r",
+							"// Creamos el objeto con el formato requerido\r",
+							"const aliasData = {\r",
+							"    alias: alias\r",
+							"};\r",
+							"\r",
+							"// Establecemos las variables en el entorno\r",
+							"pm.globals.set(\"alias\", alias);\r",
+							"pm.globals.set(\"aliasData\", JSON.stringify(aliasData));\r",
+							"\r",
+							"console.log(\"Alias generado:\", alias);\r",
+							"console.log(\"Objeto de datos:\", aliasData);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"alias\": \"{{alias}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/accounts/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Exitoso - Actualizar Alias ya en uso",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"alias\": \"{{alias}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/accounts/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Exitoso - Actualizar Alias UserId inexistente",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"alias\": \"ALIAS.DE.PRUEBA\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/accounts/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Exitoso - Actualizar Alias Sin Alias",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/accounts/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accounts Fallido - Actualizar Alias Invalido",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"alias\": \"ALIASINVALIDO\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/accounts/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"accounts",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "default",
+			"disabled": true
+		}
+	]
+}

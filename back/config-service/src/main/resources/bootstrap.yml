@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888/
+      server:
+        git:
+          uri: git@github.com:ManuelAbraham2001/config-server.git
+          ignoreLocalSshSettings: true
+          hostKey: someHostKey
+          hostKeyAlgorithm: ssh-rsa
+          privateKey: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIJKAIBAAKCAgEAsKgxYxIJozTGHtdtA+j+yv1bKuJEyzvsL8wi2S6qFeRpMQMt
+            Cw/OsO+5NuLYgKz75fU4Yw03j6bAjU7r7j9JYV5hwIptQj8Hslc8z9Cyijo187JW
+            AUiQy8o6Q19Sr95Rh3WsLiOJRiN9G5pB3WdrElizAigrBwKsYEybXnU13C9z5oif
+            2hOKEfDBB82NAzG4ugf605iq1Opy9FCq9fUlbOIQTllqUR7W38QNlnfaqxw=
+            -----END RSA PRIVATE KEY-----
+

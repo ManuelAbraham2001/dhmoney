@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "64f2c38e-f37e-4d78-95e5-9b00ae77178a",
+		"name": "Sprint 3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27380012"
+	},
+	"item": [
+		{
+			"name": "Activities Exitoso - Deposito",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Script post-request para capturar el ID de la respuesta\r",
+							"try {\r",
+							"    // Obtenemos el cuerpo de la respuesta y lo convertimos a objeto JSON\r",
+							"    var responseBody = pm.response.json();\r",
+							"    \r",
+							"    // Verificamos si la respuesta fue exitosa (código 200, 201, etc.)\r",
+							"    if (pm.response.code >= 200 && pm.response.code < 300) {\r",
+							"        // Verificamos si el ID existe en la respuesta\r",
+							"        if (responseBody.id) {\r",
+							"            // Guardamos el ID como variable global\r",
+							"            pm.globals.set(\"depositId\", responseBody.id);\r",
+							"            console.log(\"ID capturado y guardado como variable global 'depositId':\", responseBody.id);\r",
+							"        } \r",
+							"\r",
+							"    } else {\r",
+							"        console.log(\"La solicitud no fue exitosa. Código:\", pm.response.code);\r",
+							"        console.log(\"Respuesta:\", responseBody);\r",
+							"    }\r",
+							"} catch (error) {\r",
+							"    console.log(\"Error al procesar la respuesta:\", error);\r",
+							"    console.log(\"Respuesta original:\", pm.response.text());\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"50000\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Deposit\",\r\n    \"origin\": \"\",\r\n    \"destination\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Exitoso - Deposito Amount Negativo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"-500\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Deposit\",\r\n    \"origin\": \"\",\r\n    \"destination\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Deposito Sin Monto",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"Deposit\",\r\n    \"origin\": \"\",\r\n    \"destination\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Sin Tipo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"500\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"origin\": \"\",\r\n    \"destination\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Tipo invalido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": \"500\",\r\n    \"name\": \"\",\r\n    \"dated\": \"\",\r\n    \"type\": \"transaction\",\r\n    \"origin\": \"\",\r\n    \"destination\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Exitosa - Listar Actividades",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/activities/users/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Listar Actividades",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/activities/users/be34d7a3-9787-4721-923d-355596471e8r",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"users",
+						"be34d7a3-9787-4721-923d-355596471e8r"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Exitoso - Listar Actividad Por ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/activities/{{depositId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"{{depositId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Listar Actividad Por ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/activities/56b3b141-5e4-be091e9362e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"56b3b141-5e4-be091e9362e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activities Fallido - Listar Actividad Por ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8085/api/activities/56b3b141-5e41-4c41-bcd5-be091e9362e5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"api",
+						"activities",
+						"56b3b141-5e41-4c41-bcd5-be091e9362e5"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
