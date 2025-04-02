@@ -152,7 +152,15 @@ public class KeycloakService {
                 throw new UserNotFoundException("Usuario no encontrado");
             }
 
-            Keycloak keycloak = createKeycloakClient();
+            Keycloak keycloak = KeycloakBuilder.builder()
+                    .serverUrl("http://localhost:8080")
+                    .realm(realm)
+                    .username(user.getEmail())
+                    .password(user.getPassword())
+                    .clientId(clientId)
+                    .clientSecret(clientSecret)
+                    .grantType("password")
+                    .build();
 
             AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
 
